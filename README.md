@@ -4,6 +4,7 @@
 
 [![tech](https://img.shields.io/badge/stack-React%20%2B%20Vite%20%2B%20Tailwind-brightgreen)](https://github.com)
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![deploy](https://img.shields.io/badge/deploy-shifen.vercel.app-green)](https://shifen.vercel.app)
 
 ## 这是什么
 
