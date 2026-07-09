@@ -135,8 +135,8 @@ export default function Community() {
     <div className="space-y-6">
       <section className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">🌐 社区</h2>
-          <p className="text-gray-500 mt-1">看看别人扫到了什么，发现了什么</p>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">🌐 社区</h2>
+          <p className="text-gray-500 mt-1 text-sm sm:text-base">看看别人扫到了什么，发现了什么</p>
         </div>
         {!user && (
           <Link to="/login" className="text-sm text-primary-600 hover:underline">

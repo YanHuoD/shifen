@@ -37,11 +37,11 @@ export default function Home() {
   return (
     <div className="space-y-6">
       {/* Hero */}
-      <section className="text-center py-6">
-        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+      <section className="text-center py-3 sm:py-6">
+        <h1 className="text-xl sm:text-4xl font-bold text-gray-900 mb-1 sm:mb-2">
           🥗 配料表，看得明明白白
         </h1>
-        <p className="text-gray-500 text-lg">
+        <p className="text-gray-500 text-sm sm:text-lg">
           输入食品配料表，AI 帮你解读每一行小字
         </p>
       </section>
