@@ -8,7 +8,7 @@
 
 **Sprint Goal**: 管理员能通过独立后台页面对全站内容（帖子、评论、用户）进行查看和删除，并获得基础数据概览。
 
-**Duration**: 1 天（单人项目）
+**Duration**: 1 天（单人项目）| **Status**: ✅ 已完成
 
 ### Story Map
 
@@ -109,6 +109,62 @@ Nice to Have (P2)
 
 ---
 
+### Story 6: 用户编辑
+
+**As** 管理员, **I want** 在后台直接编辑用户的昵称和头像, **so that** 我能修正不合适的用户资料。
+
+**Acceptance Criteria**:
+- [x] 每个用户旁边有编辑按钮
+- [x] 点击后出现昵称输入框和 emoji 输入框
+- [x] ✓ 保存，✗ 取消
+- [x] 保存后列表实时更新
+
+**Priority**: P0 | **Effort**: S | **Dependencies**: Story 1
+
+---
+
+### Story 7: 用户状态管理
+
+**As** 管理员, **I want** 设置用户为封禁/正常状态, **so that** 我能处理违规用户。超级管理员可封禁管理员，普通管理员只能封禁普通用户。
+
+**Acceptance Criteria**:
+- [x] 下拉框切换 active / banned
+- [x] 被封禁用户登录时遭到拒绝
+- [x] admin 只能管理普通用户状态
+- [x] 不能修改 super_admin 的状态
+
+**Priority**: P0 | **Effort**: S | **Dependencies**: Story 1
+
+---
+
+### Story 8: 删除用户
+
+**As** 超级管理员, **I want** 删除用户, **so that** 我能清理不活跃或违规账号。
+
+**Acceptance Criteria**:
+- [x] 仅 super_admin 可见删除按钮
+- [x] 确认弹窗防误删
+- [x] 不能删除自己
+- [x] 删除 profile 记录
+
+**Priority**: P0 | **Effort**: S | **Dependencies**: Story 1
+
+---
+
+### Story 9: 创建用户
+
+**As** 管理员, **I want** 在后台直接创建新用户, **so that** 我能帮别人开通账号。
+
+**Acceptance Criteria**:
+- [x] 输入邮箱 + 密码 → 创建
+- [x] 自动创建 profile 记录
+- [x] 重复邮箱显示提示
+- [x] 创建成功后用户列表刷新
+
+**Priority**: P0 | **Effort**: S | **Dependencies**: Story 1
+
+---
+
 ## Technical Notes
 
 - **权限字段**: `ALTER TABLE profiles ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT false;`
@@ -119,5 +175,5 @@ Nice to Have (P2)
 
 ## Open Questions
 
-- [ ] 管理员 RLS 策略如何设计？选项 A：放宽现有 DELETE 策略允许 admin；选项 B：后台操作使用 service_role key
+- [x] 管理员 RLS 策略 → 采用选项 A：放宽现有策略，管理员豁免 `role IN ('super_admin','admin')`
 - [ ] 是否需要操作日志？（v2.0）
