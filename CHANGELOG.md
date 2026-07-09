@@ -1,5 +1,19 @@
 # 更新日志
 
+## [1.0.1] — 2026-07-10
+
+### Fixed
+- RLS 策略收紧：posts INSERT 改为 `auth.uid() = user_id`，UPDATE/DELETE 加管理员豁免
+- 移除 Admin.jsx 中硬编码的 Supabase URL 和 Key
+- DeepSeek Key 移至 Vercel Serverless Function，前端不再暴露
+
+### Added
+- 部署至 Vercel + 自定义域名 `shifen.asia`
+- Vercel Serverless Function 做 API 中转 (`api/analyze.js`)
+- `.env.example` 更新
+
+---
+
 ## [1.0.0] — 2026-07-08
 
 ### Added

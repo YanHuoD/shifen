@@ -136,28 +136,40 @@ CREATE TRIGGER on_auth_user_created
 ```sql
 -- posts
 ALTER TABLE posts ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "posts_select" ON posts FOR SELECT USING (true);
-CREATE POLICY "posts_insert" ON posts FOR INSERT WITH CHECK (true);
-CREATE POLICY "posts_delete" ON posts FOR DELETE USING (auth.uid() = user_id);
-CREATE POLICY "posts_update" ON posts FOR UPDATE USING (true);
+CREATE POLICY posts_select ON posts FOR SELECT USING (true);
+CREATE POLICY posts_insert ON posts FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY posts_update ON posts FOR UPDATE USING (auth.uid() = user_id
+  OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('super_admin','admin')));
+CREATE POLICY posts_delete ON posts FOR DELETE USING (auth.uid() = user_id
+  OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('super_admin','admin')));
+CREATE POLICY admin_delete_posts ON posts FOR DELETE USING (
+  EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('super_admin', 'admin')));
 
 -- likes
 ALTER TABLE likes ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "likes_select" ON likes FOR SELECT USING (true);
-CREATE POLICY "likes_insert" ON likes FOR INSERT WITH CHECK (auth.uid() = user_id);
-CREATE POLICY "likes_delete" ON likes FOR DELETE USING (auth.uid() = user_id);
+CREATE POLICY likes_select ON likes FOR SELECT USING (true);
+CREATE POLICY likes_insert ON likes FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY likes_delete ON likes FOR DELETE USING (auth.uid() = user_id);
 
 -- comments
 ALTER TABLE comments ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "comments_select" ON comments FOR SELECT USING (true);
-CREATE POLICY "comments_insert" ON comments FOR INSERT WITH CHECK (auth.uid() = user_id);
-CREATE POLICY "comments_delete" ON comments FOR DELETE USING (auth.uid() = user_id);
+CREATE POLICY comments_select ON comments FOR SELECT USING (true);
+CREATE POLICY comments_insert ON comments FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY comments_delete ON comments FOR DELETE USING (auth.uid() = user_id);
+CREATE POLICY admin_delete_comments ON comments FOR DELETE USING (
+  EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('super_admin', 'admin')));
 
 -- profiles
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "profiles_select" ON profiles FOR SELECT USING (true);
-CREATE POLICY "profiles_insert" ON profiles FOR INSERT WITH CHECK (auth.uid() = id);
-CREATE POLICY "profiles_update" ON profiles FOR UPDATE USING (auth.uid() = id);
+CREATE POLICY profiles_select ON profiles FOR SELECT USING (true);
+CREATE POLICY profiles_insert ON profiles FOR INSERT WITH CHECK (auth.uid() = id);
+CREATE POLICY profiles_update ON profiles FOR UPDATE USING (auth.uid() = id);
+CREATE POLICY admin_insert_profiles ON profiles FOR INSERT WITH CHECK (
+  EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('super_admin','admin')));
+CREATE POLICY admin_update_profiles ON profiles FOR UPDATE USING (
+  EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('super_admin','admin')));
+CREATE POLICY admin_delete_profiles ON profiles FOR DELETE USING (
+  EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'super_admin'));
 ```
 
 ---
