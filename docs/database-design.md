@@ -40,6 +40,8 @@
 | `id` | UUID | PK, FK → auth.users ON DELETE CASCADE | 关联 auth.users |
 | `display_name` | TEXT | | 用户昵称 |
 | `avatar_emoji` | TEXT | DEFAULT '👤' | 头像 emoji |
+| `role` | TEXT | DEFAULT 'user' | 角色：super_admin / admin / user |
+| `status` | TEXT | DEFAULT 'active' | 状态：active / banned |
 | `updated_at` | TIMESTAMPTZ | DEFAULT NOW() | 最后更新时间 |
 
 **说明**：新用户通过触发器自动创建 profile。编辑走 upsert，不存在则创建。
@@ -59,6 +61,7 @@
 | `analysis_json` | JSONB | | 完整 AI 解读结果 |
 | `likes_count` | INT | DEFAULT 0 | 点赞数（应用层维护） |
 | `comments_count` | INT | DEFAULT 0 | 评论数（触发器维护） |
+| `shared` | BOOLEAN | DEFAULT false | 是否已分享到社区 |
 | `created_at` | TIMESTAMPTZ | DEFAULT NOW() | 创建时间 |
 
 **索引**：`idx_posts_created_at` ON `created_at DESC`
