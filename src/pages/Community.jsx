@@ -132,11 +132,11 @@ export default function Community() {
   }
 
   return (
-    <div className="space-y-6">
-      <section className="flex items-center justify-between">
+    <div className="space-y-4 sm:space-y-6">
+      <section className="flex items-center justify-between pt-1 sm:pt-0">
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">🌐 社区</h2>
-          <p className="text-gray-500 mt-1 text-sm sm:text-base">看看别人扫到了什么，发现了什么</p>
+          <h2 className="text-lg sm:text-2xl font-bold text-gray-900">🌐 社区</h2>
+          <p className="text-gray-500 mt-0.5 sm:mt-1 text-xs sm:text-base">看看别人扫到了什么，发现了什么</p>
         </div>
         {!user && (
           <Link to="/login" className="text-sm text-primary-600 hover:underline">
