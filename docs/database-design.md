@@ -91,36 +91,30 @@
 
 ---
 
-## 三、触发器
+## 三、计数维护
 
-### 3.1 评论计数同步
+### 3.1 点赞计数（应用层）
+
+由前端 `toggleLike()` 函数实现：先 INSERT/DELETE like 记录 → COUNT 该帖所有 like → UPDATE `posts.likes_count`。
+
+> 放弃触发器方案：PostgreSQL 触发器在 Supabase RLS + 权限组合下不稳定。
+
+### 3.2 评论计数（手动同步）
+
+触发器 `trg_comments_count` 存在，但同样存在权限问题。数据异常时执行：
 
 ```sql
-CREATE OR REPLACE FUNCTION update_comments_count()
-RETURNS TRIGGER AS $$
-BEGIN
-  IF TG_OP = 'INSERT' THEN
-    UPDATE posts SET comments_count = comments_count + 1 WHERE id = NEW.post_id;
-  ELSIF TG_OP = 'DELETE' THEN
-    UPDATE posts SET comments_count = comments_count - 1 WHERE id = OLD.post_id;
-  END IF;
-  RETURN NULL;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trg_comments_count
-  AFTER INSERT OR DELETE ON comments
-  FOR EACH ROW EXECUTE FUNCTION update_comments_count();
+UPDATE posts SET comments_count = (SELECT COUNT(*) FROM comments WHERE comments.post_id = posts.id);
 ```
 
-### 3.2 新用户自动创建 profile
+### 3.3 新用户自动创建 profile
 
 ```sql
 CREATE OR REPLACE FUNCTION handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
   INSERT INTO public.profiles (id, display_name, avatar_emoji)
-  VALUES (NEW.id, NEW.email, '👤');
+  VALUES (NEW.id, COALESCE(NEW.email, '用户'), '👤');
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -130,7 +124,7 @@ CREATE TRIGGER on_auth_user_created
   FOR EACH ROW EXECUTE FUNCTION handle_new_user();
 ```
 
-> **注意**：点赞计数（likes_count）不走触发器，由前端 `toggleLike` 函数直接 COUNT + UPDATE，避免触发器权限问题。
+> 如果触发器被误删，用户首次编辑个人信息时会 upsert 创建 profile 记录作为兜底。
 
 ---
 
