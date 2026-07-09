@@ -42,8 +42,18 @@ export default function Layout({ children }) {
         </div>
       </header>
 
+      {/* 手机顶栏 */}
+      <header className="sm:hidden bg-white border-b border-gray-100 sticky top-0 z-40">
+        <div className="max-w-4xl mx-auto px-4 h-12 flex items-center justify-between">
+          <span className="text-primary-600 font-bold text-base">🥗 食分</span>
+          <span className="text-xs text-gray-400 truncate max-w-[160px]">
+            {user?.email?.split('@')[0] || '配料表，看得明明白白'}
+          </span>
+        </div>
+      </header>
+
       {/* 主内容 */}
-      <main className="flex-1 max-w-4xl mx-auto w-full px-3 sm:px-4 pt-[30px] pb-3 sm:py-6">
+      <main className="flex-1 max-w-4xl mx-auto w-full px-3 sm:px-4 pt-3 sm:py-6">
         {children}
       </main>
 
