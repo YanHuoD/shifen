@@ -34,12 +34,12 @@ export default function Home() {
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      {/* Hero — 桌面显示完整，手机精简 */}
-      <section className="text-center py-2 sm:py-6">
-        <h1 className="text-lg sm:text-4xl font-bold text-gray-900">
+      {/* Hero */}
+      <section className="text-center py-3 sm:py-6">
+        <h1 className="text-2xl sm:text-4xl font-bold text-gray-900">
           🥗 配料表，看得明明白白
         </h1>
-        <p className="text-gray-400 text-xs sm:text-lg mt-0.5 sm:mt-2">
+        <p className="text-gray-500 text-sm sm:text-lg mt-1 sm:mt-2">
           输入食品配料表，AI 帮你解读每一行小字
         </p>
       </section>
