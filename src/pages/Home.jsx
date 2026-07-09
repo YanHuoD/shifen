@@ -33,7 +33,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col justify-center min-h-[70vh] sm:min-h-0 space-y-4 sm:space-y-6">
+    <div className="pt-[12vh] sm:pt-0 space-y-4 sm:space-y-6">
       {/* Hero */}
       <section className="text-center pt-4 pb-3 sm:py-6">
         <h1 className="text-2xl sm:text-4xl font-bold text-gray-900">
