@@ -116,8 +116,9 @@ export default function Admin() {
     setCreating(true)
     setCreateMsg('')
     try {
-      const url = import.meta.env.VITE_SUPABASE_URL || 'https://wwalhfszlbfinmrglcbe.supabase.co'
-      const key = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_Afzq1U67PL6XZRUawXq2jw_xdezr0qV'
+      const url = import.meta.env.VITE_SUPABASE_URL
+      const key = import.meta.env.VITE_SUPABASE_ANON_KEY
+      if (!url || !key) throw new Error('Supabase 未配置')
       const res = await fetch(`${url}/auth/v1/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'apikey': key },
