@@ -35,7 +35,7 @@ export default function Home() {
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Hero */}
-      <section className="text-center py-3 sm:py-6">
+      <section className="text-center pt-4 pb-2 sm:py-6">
         <h1 className="text-2xl sm:text-4xl font-bold text-gray-900">
           🥗 配料表，看得明明白白
         </h1>
