@@ -11,6 +11,9 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
 
   try {
+    const apiKey = process.env.DEEPSEEK_API_KEY
+    if (!apiKey) return res.status(500).json({ error: 'API Key 未配置，请在 Vercel 环境变量中设置 DEEPSEEK_API_KEY' })
+
     const { ingredients } = req.body
     if (!ingredients) return res.status(400).json({ error: 'Missing ingredients' })
 
@@ -51,6 +54,11 @@ export default async function handler(req, res) {
         max_tokens: 2000,
       }),
     })
+
+    if (!response.ok) {
+      const errText = await response.text()
+      return res.status(500).json({ error: `DeepSeek API 报错: ${response.status} ${errText.slice(0, 200)}` })
+    }
 
     const data = await response.json()
     const content = data.choices?.[0]?.message?.content || ''
