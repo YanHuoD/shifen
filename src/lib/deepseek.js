@@ -31,20 +31,20 @@ export async function analyzeIngredients(ingredients) {
 
 {
   "summary": "一句话总结（不超过50字），告诉用户这东西整体怎么样",
-  "healthScore": 7.5,
-  "scoreLabel": "比较健康",
+  "healthScore": 7.5,  // 1-10分，10分最健康
+  "scoreLabel": "比较健康",  // 对应的等级标签
   "ingredients": [
     {
       "name": "成分名",
       "category": "基础原料 | 食品添加剂 | 甜味剂 | 防腐剂 | 色素 | 香精 | 其他",
       "riskLevel": "安全 | 注意 | 慎用",
-      "description": "用通俗语言解释这个成分",
-      "suitableFor": ["一般人群"],
-      "notSuitableFor": ["糖尿病人群"]
+      "description": "用通俗语言解释这个成分是干什么的，对健康有什么影响（20-80字）",
+      "suitableFor": ["一般人群", "孕妇", "儿童"],  // 适合哪些人群
+      "notSuitableFor": ["糖尿病人群"]  // 不适合哪些人群
     }
   ],
-  "overallAdvice": "总体建议（30-100字）",
-  "tags": ["高蛋白", "低糖"]
+  "overallAdvice": "总体建议（30-100字）：这东西适合谁，不适合谁，吃多少合适",
+  "tags": ["高蛋白", "低糖"]  // 标签，最多5个
 }
 
 分析要点：
