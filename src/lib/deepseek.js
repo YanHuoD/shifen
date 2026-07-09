@@ -45,7 +45,14 @@ export async function analyzeIngredients(ingredients) {
   ],
   "overallAdvice": "总体建议（30-100字）",
   "tags": ["高蛋白", "低糖"]
-}`
+}
+
+分析要点：
+1. 注意区分"配料"和"营养成分"——用户可能会混合输入，都要处理
+2. 对食品添加剂要特别说明其安全性和用途
+3. 考虑宝妈、减脂健身人群、慢性病患者等特殊人群的关切
+4. 语气要客观、专业但不吓唬人，避免制造食品安全焦虑
+5. 如果有不确定的成分，诚实标注，不要编造`
 
     const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
       method: 'POST',
