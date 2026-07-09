@@ -43,7 +43,7 @@ export default function Layout({ children }) {
       </header>
 
       {/* 主内容 */}
-      <main className="flex-1 max-w-4xl mx-auto w-full px-3 sm:px-4 pt-6 pb-3 sm:py-6">
+      <main className="flex-1 max-w-4xl mx-auto w-full px-3 sm:px-4 pt-[30px] pb-3 sm:py-6">
         {children}
       </main>
 
