@@ -135,7 +135,7 @@ export default function Community() {
     <div className="space-y-4 sm:space-y-6">
       <section className="flex items-center justify-between pt-1 sm:pt-0">
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">🌐 社区</h2>
+          <h2 className="text-2xl font-bold text-gray-900">🌐 社区</h2>
           <p className="text-gray-500 mt-0.5 sm:mt-1 text-xs sm:text-base">看看别人扫到了什么，发现了什么</p>
         </div>
         {!user && (
