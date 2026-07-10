@@ -56,7 +56,7 @@ npm run dev
 AI 接口    DeepSeek API
 后端服务    Supabase (PostgreSQL + Auth)
 API 中转    Vercel Serverless Function（Key 无泄露）
-移动端      PWA + 底部导航 + 响应式适配
+移动端      底部导航 + 响应式适配 + 顶栏优化
 部署       Vercel + 自定义域名 shifen.asia
 ```
 
