@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Send, Loader2, Search } from 'lucide-react'
+import { useState, useRef } from 'react'
+import { Send, Loader2, Search, Camera } from 'lucide-react'
 import { analyzeIngredients } from '../lib/deepseek'
 import { saveToLocalHistory } from '../lib/localHistory'
 import AnalysisResult from '../components/AnalysisResult'
@@ -9,6 +9,37 @@ export default function Home() {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState(null)
   const [error, setError] = useState('')
+  const [ocrLoading, setOcrLoading] = useState(false)
+  const fileInputRef = useRef(null)
+
+  const handleOCR = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setOcrLoading(true)
+    setError('')
+    try {
+      // 转 base64
+      const base64 = await new Promise((resolve) => {
+        const reader = new FileReader()
+        reader.onload = () => resolve(reader.result.split(',')[1])
+        reader.readAsDataURL(file)
+      })
+
+      // 调 OCR
+      const res = await fetch('/api/ocr', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: base64 }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+      if (data.text) setInput(data.text)
+    } catch (e) {
+      setError(e.message)
+    } finally {
+      setOcrLoading(false)
+    }
+  }
 
   const examples = [
     '小麦粉、白砂糖、精炼植物油、可可粉、碳酸氢钠、食用香精',
@@ -46,6 +77,31 @@ export default function Home() {
 
       {/* 输入区域 */}
       <section className="card">
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          onChange={handleOCR}
+          className="hidden"
+        />
+        <div className="flex items-center justify-between mb-2">
+          <label className="block text-sm font-medium text-gray-700">
+            粘贴配料表文字
+          </label>
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={ocrLoading}
+            className="flex items-center gap-1.5 text-xs text-primary-600 hover:text-primary-700 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            {ocrLoading ? (
+              <Loader2 size={14} className="animate-spin" />
+            ) : (
+              <Camera size={14} />
+            )}
+            {ocrLoading ? '识别中...' : '拍照识别'}
+          </button>
+        </div>
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
