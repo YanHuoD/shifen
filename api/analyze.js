@@ -17,6 +17,7 @@ export default async function handler(req, res) {
     const { ingredients } = req.body
     if (!ingredients) return res.status(400).json({ error: 'Missing ingredients' })
 
+    // ⚠️ 权威来源：src/lib/prompt.js，修改时两处同步
     const systemPrompt = `你是一位专业的食品营养专家，擅长解读食品配料表。你的任务是用通俗易懂的中文，帮助普通消费者理解他们吃的食物。
 
 请严格按照以下 JSON 格式返回结果（不要包含任何其他文字，只返回 JSON）：
