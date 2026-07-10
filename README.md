@@ -51,7 +51,7 @@ npm run dev
 
 ```
 前端       React 19 + Vite + Tailwind CSS 3
-路由       React Router 6
+路由       React Router 7
 图标       Lucide React
 AI 接口    DeepSeek API
 后端服务    Supabase (PostgreSQL + Auth)
