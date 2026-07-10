@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { LayoutDashboard, FileText, Users, MessageSquare, Trash2, Loader2, ExternalLink, ChevronLeft, AlertCircle, Shield, Edit3, Check, X, ChevronDown } from 'lucide-react'
 import { useAuth } from '../lib/AuthContext'
 import { supabase } from '../lib/supabase'
+import { formatTime as _fmt } from '../lib/utils'
 
 function getTabs(isSuperAdmin) {
   const tabs = [
@@ -17,15 +18,7 @@ function getTabs(isSuperAdmin) {
   return tabs
 }
 
-function formatTime(iso) {
-  if (!iso) return ''
-  const d = new Date(iso)
-  const month = d.getMonth() + 1
-  const day = d.getDate()
-  const hour = String(d.getHours()).padStart(2, '0')
-  const min = String(d.getMinutes()).padStart(2, '0')
-  return `${d.getFullYear()}年${month}月${day}日 ${hour}:${min}`
-}
+function formatTime(iso) { return _fmt(iso, false) }
 
 export default function Admin() {
   const { user } = useAuth()

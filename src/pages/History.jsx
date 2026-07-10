@@ -5,19 +5,8 @@ import { useAuth } from '../lib/AuthContext'
 import { supabase } from '../lib/supabase'
 import { getLocalHistory, deleteLocalHistory } from '../lib/localHistory'
 import EditPostModal from '../components/EditPostModal'
+import { formatTime } from '../lib/utils'
 
-function formatTime(iso) {
-  const d = new Date(iso)
-  const month = d.getMonth() + 1
-  const day = d.getDate()
-  const hour = String(d.getHours()).padStart(2, '0')
-  const min = String(d.getMinutes()).padStart(2, '0')
-  const now = new Date()
-  if (d.toDateString() === now.toDateString()) return `今天 ${hour}:${min}`
-  const yesterday = new Date(now); yesterday.setDate(yesterday.getDate() - 1)
-  if (d.toDateString() === yesterday.toDateString()) return `昨天 ${hour}:${min}`
-  return `${d.getFullYear()}年${month}月${day}日 ${hour}:${min}`
-}
 
 function getScoreColor(score) {
   if (score >= 8) return 'text-green-600 bg-green-50 border-green-200'

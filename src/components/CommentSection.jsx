@@ -4,18 +4,7 @@ import { fetchComments, addComment, deleteComment } from '../lib/api'
 import { useAuth } from '../lib/AuthContext'
 import { Link } from 'react-router-dom'
 
-function formatTime(iso) {
-  const d = new Date(iso)
-  const month = d.getMonth() + 1
-  const day = d.getDate()
-  const hour = String(d.getHours()).padStart(2, '0')
-  const min = String(d.getMinutes()).padStart(2, '0')
-  const now = new Date()
-  if (d.toDateString() === now.toDateString()) return `今天 ${hour}:${min}`
-  const yesterday = new Date(now); yesterday.setDate(yesterday.getDate() - 1)
-  if (d.toDateString() === yesterday.toDateString()) return `昨天 ${hour}:${min}`
-  return `${d.getFullYear()}年${month}月${day}日 ${hour}:${min}`
-}
+import { formatTime } from '../lib/utils'
 
 export default function CommentSection({ postId, commentCount, onToggle }) {
   const { user } = useAuth()

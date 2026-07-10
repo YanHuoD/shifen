@@ -6,6 +6,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../lib/AuthContext'
 import CommentSection from '../components/CommentSection'
 import EditPostModal from '../components/EditPostModal'
+import { formatTime } from '../lib/utils'
 
 // 本地 mock 数据（Supabase 未配置时展示）
 const FALLBACK_POSTS = [
@@ -31,22 +32,6 @@ const FALLBACK_POSTS = [
   },
 ]
 
-function formatTime(iso) {
-  const d = new Date(iso)
-  const month = d.getMonth() + 1
-  const day = d.getDate()
-  const hour = String(d.getHours()).padStart(2, '0')
-  const min = String(d.getMinutes()).padStart(2, '0')
-  const now = new Date()
-  const diff = now - d
-  // 今天：显示"今天 14:30"
-  if (d.toDateString() === now.toDateString()) return `今天 ${hour}:${min}`
-  // 昨天：显示"昨天 14:30"
-  const yesterday = new Date(now); yesterday.setDate(yesterday.getDate() - 1)
-  if (d.toDateString() === yesterday.toDateString()) return `昨天 ${hour}:${min}`
-  // 其他：显示"7月8日 14:30"
-  return `${d.getFullYear()}年${month}月${day}日 ${hour}:${min}`
-}
 
 function getScoreColor(score) {
   if (score >= 8) return 'text-green-600 bg-green-50'
