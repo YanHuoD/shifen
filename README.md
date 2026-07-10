@@ -5,7 +5,7 @@
 [![tech](https://img.shields.io/badge/stack-React%20%2B%20Vite%20%2B%20Tailwind-brightgreen)](https://github.com)
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![deploy](https://img.shields.io/badge/deploy-shifen.asia-green)](https://shifen.asia)
-[![version](https://img.shields.io/badge/version-1.0.2-blue)](CHANGELOG.md)
+[![version](https://img.shields.io/badge/version-1.1.0-blue)](CHANGELOG.md)
 
 ## 这是什么
 
@@ -54,6 +54,7 @@ npm run dev
 路由       React Router 7
 图标       Lucide React
 AI 接口    DeepSeek API
+OCR 识别    百度 OCR（v1.1）
 后端服务    Supabase (PostgreSQL + Auth)
 API 中转    Vercel Serverless Function（Key 无泄露）
 移动端      底部导航 + 响应式适配 + 顶栏优化
