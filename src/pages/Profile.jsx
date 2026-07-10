@@ -4,6 +4,7 @@ import { useAuth } from '../lib/AuthContext'
 import { supabase } from '../lib/supabase'
 import { useState, useEffect } from 'react'
 import ProfileEditModal from '../components/ProfileEditModal'
+import { scoreBadge } from '../lib/utils'
 
 export default function Profile() {
   const { user, loading, signOut } = useAuth()
@@ -116,11 +117,6 @@ export default function Profile() {
     ? new Date(user.created_at).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })
     : '未知'
 
-  function getScoreColor(score) {
-    if (score >= 8) return 'text-green-600 bg-green-50'
-    if (score >= 6) return 'text-yellow-600 bg-yellow-50'
-    return 'text-red-600 bg-red-50'
-  }
 
   return (
     <div className="space-y-6 max-w-sm mx-auto">
@@ -191,7 +187,7 @@ export default function Profile() {
           <div className="divide-y divide-gray-50">
             {recentPosts.map((post) => (
               <div key={post.id} className="px-6 py-3 flex items-center gap-3">
-                <span className={`flex-shrink-0 w-8 h-8 rounded-lg font-bold text-xs flex items-center justify-center ${getScoreColor(post.health_score)}`}>
+                <span className={`flex-shrink-0 w-8 h-8 rounded-lg font-bold text-xs flex items-center justify-center ${scoreBadge(post.health_score)}`}>
                   {post.health_score}
                 </span>
                 <div className="flex-1 min-w-0">

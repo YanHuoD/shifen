@@ -6,7 +6,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../lib/AuthContext'
 import CommentSection from '../components/CommentSection'
 import EditPostModal from '../components/EditPostModal'
-import { formatTime } from '../lib/utils'
+import { formatTime, scoreBadge } from '../lib/utils'
 
 // 本地 mock 数据（Supabase 未配置时展示）
 const FALLBACK_POSTS = [
@@ -32,12 +32,6 @@ const FALLBACK_POSTS = [
   },
 ]
 
-
-function getScoreColor(score) {
-  if (score >= 8) return 'text-green-600 bg-green-50'
-  if (score >= 6) return 'text-yellow-600 bg-yellow-50'
-  return 'text-red-600 bg-red-50'
-}
 
 export default function Community() {
   const { user } = useAuth()
@@ -198,7 +192,7 @@ export default function Community() {
 
             {/* 解读结果 */}
             <div className="flex items-start gap-3 mb-3">
-              <span className={`flex-shrink-0 w-10 h-10 rounded-lg font-bold text-sm flex items-center justify-center ${getScoreColor(post.health_score)}`}>
+              <span className={`flex-shrink-0 w-10 h-10 rounded-lg font-bold text-sm flex items-center justify-center ${scoreBadge(post.health_score)}`}>
                 {post.health_score}
               </span>
               <p className="text-sm text-gray-700 leading-relaxed">{post.summary}</p>

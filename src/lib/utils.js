@@ -23,3 +23,30 @@ export function formatTime(iso, useRelative = true) {
   if (d.toDateString() === yesterday.toDateString()) return `昨天 ${hour}:${min}`
   return full
 }
+
+/**
+ * 评分徽章色（文字+背景）：绿(>=8) / 黄(>=6) / 红(<6)
+ */
+export function scoreBadge(score) {
+  if (score >= 8) return 'text-green-600 bg-green-50'
+  if (score >= 6) return 'text-yellow-600 bg-yellow-50'
+  return 'text-red-600 bg-red-50'
+}
+
+/**
+ * 评分纯文字色
+ */
+export function scoreText(score) {
+  if (score >= 8) return 'text-green-600'
+  if (score >= 6) return 'text-yellow-600'
+  return 'text-red-600'
+}
+
+/**
+ * 评分背景+边框
+ */
+export function scoreCard(score) {
+  if (score >= 8) return 'bg-green-50 border-green-200'
+  if (score >= 6) return 'bg-yellow-50 border-yellow-200'
+  return 'bg-red-50 border-red-200'
+}

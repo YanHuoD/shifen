@@ -5,14 +5,9 @@ import { useAuth } from '../lib/AuthContext'
 import { supabase } from '../lib/supabase'
 import { getLocalHistory, deleteLocalHistory } from '../lib/localHistory'
 import EditPostModal from '../components/EditPostModal'
-import { formatTime } from '../lib/utils'
+import { formatTime, scoreBadge, scoreCard } from '../lib/utils'
 
 
-function getScoreColor(score) {
-  if (score >= 8) return 'text-green-600 bg-green-50 border-green-200'
-  if (score >= 6) return 'text-yellow-600 bg-yellow-50 border-yellow-200'
-  return 'text-red-600 bg-red-50 border-red-200'
-}
 
 export default function History() {
   const { user } = useAuth()
@@ -211,7 +206,7 @@ export default function History() {
             <div key={post.id} className="card hover:shadow-md transition-shadow">
               {/* 标题行 */}
               <div className="flex items-center gap-3">
-                <span className={`flex-shrink-0 w-10 h-10 rounded-lg font-bold text-sm flex items-center justify-center border ${getScoreColor(post.health_score)}`}>
+                <span className={`flex-shrink-0 w-10 h-10 rounded-lg font-bold text-sm flex items-center justify-center border ${scoreText(post.health_score)} ${scoreCard(post.health_score)}`}>
                   {post.health_score}
                 </span>
                 <div className="flex-1 min-w-0">

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Heart, AlertTriangle, CheckCircle2, Info, Share2, Loader2, Check } from 'lucide-react'
 import { useAuth } from '../lib/AuthContext'
 import { createPost } from '../lib/api'
+import { scoreText, scoreCard } from '../lib/utils'
 
 const riskConfig = {
   '安全': { icon: CheckCircle2, color: 'text-green-600', bg: 'bg-green-50', border: 'border-green-200' },
@@ -21,17 +22,6 @@ function normalizeRisk(level) {
   return '注意'
 }
 
-function getScoreColor(score) {
-  if (score >= 8) return 'text-green-600'
-  if (score >= 6) return 'text-yellow-600'
-  return 'text-red-600'
-}
-
-function getScoreBg(score) {
-  if (score >= 8) return 'bg-green-50 border-green-200'
-  if (score >= 6) return 'bg-yellow-50 border-yellow-200'
-  return 'bg-red-50 border-red-200'
-}
 
 export default function AnalysisResult({ data, ingredients }) {
   const { user } = useAuth()
@@ -63,11 +53,11 @@ export default function AnalysisResult({ data, ingredients }) {
     <div className="space-y-6">
       {/* 一句话总结 + 评分 */}
       <section className="card flex flex-col sm:flex-row gap-4 items-start">
-        <div className={`flex-shrink-0 w-20 h-20 rounded-xl border-2 flex flex-col items-center justify-center ${getScoreBg(healthScore)}`}>
-          <span className={`text-2xl font-bold ${getScoreColor(healthScore)}`}>
+        <div className={`flex-shrink-0 w-20 h-20 rounded-xl border-2 flex flex-col items-center justify-center ${scoreCard(healthScore)}`}>
+          <span className={`text-2xl font-bold ${scoreText(healthScore)}`}>
             {healthScore}
           </span>
-          <span className={`text-xs font-medium ${getScoreColor(healthScore)}`}>
+          <span className={`text-xs font-medium ${scoreText(healthScore)}`}>
             {scoreLabel || '一般'}
           </span>
         </div>
