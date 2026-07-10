@@ -51,27 +51,23 @@ export default async function handler(req, res) {
 
     const words = (data.words_result || []).map(w => w.words)
 
-    // 过滤噪音：只保留配料表相关行
-    const ingredientKeywords = /[配料成分糖油脂粉剂钠酸醇素香精色素添加淀粉乳胶酶钙铁锌维生素]/
-    const separatorPattern = /[，,、、]/
+    // 找配料表起始位置
+    const headerIdx = words.findIndex(line => /配料[表：:]|原料[：:]|成分[表：:]/ .test(line))
+    let filtered = headerIdx >= 0 ? words.slice(headerIdx) : words
 
-    let filtered = words.filter(line => {
-      // 跳过太短的（品牌名、单个字）
-      if (line.length < 4) return false
-      // 跳过明显不是配料的（含百分数、毫升、克重等营养表内容）
-      if (/[\d.]+%/.test(line) && !separatorPattern.test(line)) return false
-      if (/^\d+[克克gG毫升mLml]/.test(line)) return false
-      return ingredientKeywords.test(line)
+    // 温和过滤：去掉明确不是配料的噪音
+    const separatorPattern = /[，,、、]/
+    const noisePattern = /^[\d.]+[%克克gG毫升mLml]|保质期|生产日期|储存|贮藏|出品|地址|电话|网址|www|营养成分|能量|蛋白质|脂肪|碳水化合物|钠$/
+
+    filtered = filtered.filter(line => {
+      if (noisePattern.test(line)) return false  // 明确噪音
+      if (line.length < 2) return false           // 单字
+      return true
     })
 
-    // 若过滤太狠（结果<2条），退回全部文字
+    // 若过滤后太少，保留全部
     if (filtered.length < 2) filtered = words
 
-    // 找配料表起始位置（如"配料表"、"配料："）
-    const headerIdx = filtered.findIndex(line => /配料[表：:]|原料[：:]|成分[表：:]/ .test(line))
-    if (headerIdx >= 0) filtered = filtered.slice(headerIdx)
-
-    // 拼接结果
     const text = filtered.join('，')
 
     return res.status(200).json({ text })
