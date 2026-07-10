@@ -51,21 +51,32 @@ export default async function handler(req, res) {
 
     const words = (data.words_result || []).map(w => w.words)
 
-    // 找配料表起始位置
+    // 找配料表标题位置，只取后面的文字
     const headerIdx = words.findIndex(line => /配料[表：:]|原料[：:]|成分[表：:]/ .test(line))
     let filtered = headerIdx >= 0 ? words.slice(headerIdx) : words
 
-    // 温和过滤：去掉明确不是配料的噪音
-    const separatorPattern = /[，,、、]/
-    const noisePattern = /^[\d.]+[%克克gG毫升mLml]|保质期|生产日期|储存|贮藏|出品|地址|电话|网址|www|营养成分|能量|蛋白质|脂肪|碳水化合物|钠$/
+    // 从标题后去掉标题行本身（如果标题在第一位）
+    if (filtered.length > 1 && /配料[表：:]|原料[：:]|成分[表：:]/ .test(filtered[0])) {
+      filtered = filtered.slice(1)
+    }
+
+    // 去掉明确不是配料的噪音行
+    const noisePatterns = [
+      /^[\d.]+[%克克gG毫升mLml]/,  // 克重/百分比
+      /保质期|生产日期|储存|贮藏/,      // 日期存储
+      /出品|地址|电话|网址|www/,       // 厂家信息
+      /营养成分|能量$|蛋白质$|脂肪$/,   // 营养表
+      /^\d+[.]?\d*$/,                   // 纯数字
+    ]
 
     filtered = filtered.filter(line => {
-      if (noisePattern.test(line)) return false  // 明确噪音
-      if (line.length < 2) return false           // 单字
+      if (line.length < 3) return false
+      for (const p of noisePatterns) {
+        if (p.test(line)) return false
+      }
       return true
     })
 
-    // 若过滤后太少，保留全部
     if (filtered.length < 2) filtered = words
 
     const text = filtered.join('，')
