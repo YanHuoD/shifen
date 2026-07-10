@@ -167,9 +167,9 @@ Nice to Have (P2)
 
 ## Technical Notes
 
-- **权限字段**: `ALTER TABLE profiles ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT false;`
-- **路由**: `App.jsx` 新增 `<Route path="/admin" element={<Admin />} />`
-- **权限守卫**: Admin 页面组件内检查 `profile.is_admin`，非管理员 redirect 到 `/`
+- **权限字段**: `ALTER TABLE profiles ADD COLUMN IF NOT EXISTS role TEXT DEFAULT 'user';`
+- **路由**: 全部 6 条：`/` `/community` `/login` `/profile` `/history` `/admin`
+- **权限守卫**: Admin 页面组件内检查 `profile.role`，非 admin 重定向到 `/`
 - **数据查询**: 直接 `supabase.from('posts').select('*')` 不加 user_id 过滤
 - **RLS 底线**: 已有策略限制普通用户只能删自己的内容；管理员需额外策略或使用 service_role（建议 v1.0 先用 service_role 或放宽策略）
 
