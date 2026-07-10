@@ -1,7 +1,10 @@
 {
-  "name": "nutrition-scanner",
+  "name": "shifen",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.2",
+  "description": "🥗 食分 — 配料表解读，吃得明明白白",
+  "homepage": "https://shifen.asia",
+  "repository": "github:YanHuoD/shifen",
   "type": "module",
   "scripts": {
     "dev": "vite",
