@@ -49,10 +49,30 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: `OCR 失败: ${data.error_msg}` })
     }
 
-    // 拼接所有识别到的文字
-    const text = (data.words_result || [])
-      .map(w => w.words)
-      .join('，')
+    const words = (data.words_result || []).map(w => w.words)
+
+    // 过滤噪音：只保留配料表相关行
+    const ingredientKeywords = /[配料成分糖油脂粉剂钠酸醇素香精色素添加淀粉乳胶酶钙铁锌维生素]/
+    const separatorPattern = /[，,、、]/
+
+    let filtered = words.filter(line => {
+      // 跳过太短的（品牌名、单个字）
+      if (line.length < 4) return false
+      // 跳过明显不是配料的（含百分数、毫升、克重等营养表内容）
+      if (/[\d.]+%/.test(line) && !separatorPattern.test(line)) return false
+      if (/^\d+[克克gG毫升mLml]/.test(line)) return false
+      return ingredientKeywords.test(line)
+    })
+
+    // 若过滤太狠（结果<2条），退回全部文字
+    if (filtered.length < 2) filtered = words
+
+    // 找配料表起始位置（如"配料表"、"配料："）
+    const headerIdx = filtered.findIndex(line => /配料[表：:]|原料[：:]|成分[表：:]/ .test(line))
+    if (headerIdx >= 0) filtered = filtered.slice(headerIdx)
+
+    // 拼接结果
+    const text = filtered.join('，')
 
     return res.status(200).json({ text })
   } catch (err) {
