@@ -67,12 +67,12 @@ export default function Home() {
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
-      if (data.ingredients) {
+      if (data.found === false) {
+        setError('商品未收录，请拍照识别')
+      } else if (data.ingredients) {
         setInput(data.ingredients)
       } else if (data.name) {
         setError(`「${data.name}」无配料数据，请拍照识别`)
-        // 自动滑到拍照按钮
-        fileInputRef.current?.scrollIntoView?.({ behavior: 'smooth' })
       } else {
         setError('商品未收录，请拍照识别')
       }
