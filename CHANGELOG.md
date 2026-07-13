@@ -3,9 +3,10 @@
 ## [1.1.0] — 2026-07-10
 
 ### Added
-- OCR 拍照识别配料表（百度 OCR API）
-- Vercel Serverless Function 做 OCR 代理 (`api/ocr.js`)，凭证服务端安全
-- 首页「拍照识别」按钮，手机相机直接拍摄
+- OCR 拍照识别配料表（百度 OCR API）+ 智能噪音过滤
+- 商品条码扫描（Open Food Facts + BarcodeDetector API）
+- Vercel 函数：`api/ocr.js`（OCR代理）、`api/barcode.js`（条码查询）
+- 首页「拍照识别」+「扫条码」双按钮
 
 ---
 

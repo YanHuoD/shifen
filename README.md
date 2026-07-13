@@ -54,7 +54,7 @@ npm run dev
 路由       React Router 7
 图标       Lucide React
 AI 接口    DeepSeek API
-OCR 识别    百度 OCR（v1.1）
+OCR 识别    百度 OCR + 条码扫描（v1.1）
 后端服务    Supabase (PostgreSQL + Auth)
 API 中转    Vercel Serverless Function（Key 无泄露）
 移动端      底部导航 + 响应式适配 + 顶栏优化
