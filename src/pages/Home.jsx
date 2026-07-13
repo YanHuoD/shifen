@@ -69,8 +69,12 @@ export default function Home() {
       if (!res.ok) throw new Error(data.error)
       if (data.ingredients) {
         setInput(data.ingredients)
+      } else if (data.name) {
+        setError(`「${data.name}」无配料数据，请拍照识别`)
+        // 自动滑到拍照按钮
+        fileInputRef.current?.scrollIntoView?.({ behavior: 'smooth' })
       } else {
-        setError(`找到「${data.name}」但无配料数据，请拍照识别`)
+        setError('商品未收录，请拍照识别')
       }
     } catch (e) {
       setError(e.message)
