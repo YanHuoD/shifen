@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { Send, Loader2, Search, Camera } from 'lucide-react'
+import { Send, Loader2, Search, Camera, ScanLine } from 'lucide-react'
 import { analyzeIngredients } from '../lib/deepseek'
 import { saveToLocalHistory } from '../lib/localHistory'
 import AnalysisResult from '../components/AnalysisResult'
@@ -10,7 +10,74 @@ export default function Home() {
   const [result, setResult] = useState(null)
   const [error, setError] = useState('')
   const [ocrLoading, setOcrLoading] = useState(false)
+  const [scanLoading, setScanLoading] = useState(false)
   const fileInputRef = useRef(null)
+  const videoRef = useRef(null)
+  const [scanning, setScanning] = useState(false)
+
+  const handleBarcode = async () => {
+    // 优先使用 BarcodeDetector API（Chrome）
+    if ('BarcodeDetector' in window) {
+      let stream = null
+      try {
+        setScanning(true)
+        setScanLoading(true)
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'environment' }
+        })
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream
+          await videoRef.current.play()
+        }
+
+        const detector = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'upc_a'] })
+        const detect = async () => {
+          if (!videoRef.current) return
+          const barcodes = await detector.detect(videoRef.current)
+          if (barcodes.length > 0) {
+            const code = barcodes[0].rawValue
+            stream.getTracks().forEach(t => t.stop())
+            setScanning(false)
+            await lookupBarcode(code)
+            return
+          }
+          requestAnimationFrame(detect)
+        }
+        detect()
+        return
+      } catch (e) {
+        setScanning(false)
+        stream && stream.getTracks().forEach(t => t.stop())
+      }
+    }
+    // 回退：手动输入
+    const code = prompt('请输入商品条码（13位数字）：')
+    if (code) lookupBarcode(code)
+    setScanLoading(false)
+  }
+
+  const lookupBarcode = async (code) => {
+    setScanLoading(true)
+    setError('')
+    try {
+      const res = await fetch('/api/barcode', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ barcode: code }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+      if (data.ingredients) {
+        setInput(data.ingredients)
+      } else {
+        setError(`找到「${data.name}」但无配料数据，请拍照识别`)
+      }
+    } catch (e) {
+      setError(e.message)
+    } finally {
+      setScanLoading(false)
+    }
+  }
 
   const handleOCR = async (e) => {
     const file = e.target.files?.[0]
@@ -101,7 +168,40 @@ export default function Home() {
             )}
             {ocrLoading ? '识别中...' : '拍照识别'}
           </button>
+          <button
+            onClick={handleBarcode}
+            disabled={scanLoading}
+            className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            {scanLoading ? (
+              <Loader2 size={14} className="animate-spin" />
+            ) : (
+              <ScanLine size={14} />
+            )}
+            {scanLoading ? '查询中...' : '扫条码'}
+          </button>
         </div>
+        {/* 条码扫描器 */}
+        {scanning && (
+          <div className="relative w-full max-w-sm mx-auto aspect-video bg-black rounded-lg overflow-hidden mb-3">
+            <video ref={videoRef} className="w-full h-full object-cover" />
+            <p className="absolute bottom-2 left-0 right-0 text-white text-xs text-center bg-black/40 py-1">
+              将条码对准屏幕
+            </p>
+            <button
+              onClick={() => {
+                setScanning(false)
+                setScanLoading(false)
+                if (videoRef.current?.srcObject) {
+                  videoRef.current.srcObject.getTracks().forEach(t => t.stop())
+                }
+              }}
+              className="absolute top-2 right-2 text-white bg-black/40 rounded-full p-1 text-xs"
+            >
+              ✕
+            </button>
+          </div>
+        )}
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
