@@ -38,6 +38,9 @@ cp .env.example .env
 
 # 3. 启动开发服务器
 npm run dev
+
+# 4. 运行测试
+npm test
 ```
 
 ### 需要的 API Key

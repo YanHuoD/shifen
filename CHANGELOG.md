@@ -4,9 +4,10 @@
 
 ### Added
 - OCR 拍照识别配料表（百度 OCR API）+ 智能噪音过滤
-- 商品条码扫描（Open Food Facts + BarcodeDetector API）
+- 商品条码扫描（Open Food Facts + BarcodeDetector API）+ 未收录友好提示
 - Vercel 函数：`api/ocr.js`（OCR代理）、`api/barcode.js`（条码查询）
 - 首页「拍照识别」+「扫条码」双按钮
+- 自动化测试（Vitest + Testing Library，14 个测试）
 
 ---
 
